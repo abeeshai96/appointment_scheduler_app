@@ -15,7 +15,6 @@ import {
 } from "@devexpress/dx-react-scheduler-material-ui";
 
 import EditAppt from "../../containers/EditAppt/EditAppt";
-import DeleteAppt from "../../containers/DeleteAppt/DeleteAppt";
 import ModalAlert from "../../components/Modals/ModalAlert";
 
 const CalendarView = (props) => {
