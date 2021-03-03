@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Paper from "@material-ui/core/Paper";
 import { ViewState } from "@devexpress/dx-react-scheduler";
 import {
@@ -13,6 +13,7 @@ import {
   MonthView,
   DayView,
 } from "@devexpress/dx-react-scheduler-material-ui";
+import axios from "axios";
 
 import EditAppt from "../../containers/EditAppt/EditAppt";
 import ModalAlert from "../../components/Modals/ModalAlert";
@@ -23,6 +24,19 @@ const CalendarView = (props) => {
   const [editData, setEditData] = useState([]);
   const [dlt, setDlt] = useState(false);
   const [deleteData, setDeleteData] = useState();
+  const [appts, setAppts] = useState();
+
+  const fetchDataHandler = useCallback(() => {
+    axios.get("/appointments").then((res) => {
+      setAppts(res.data);
+      console.log(res);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("Test Render");
+    fetchDataHandler();
+  }, [fetchDataHandler]);
 
   const Appointment = ({ children, style, ...restProps }) => (
     <Appointments.Appointment
@@ -37,14 +51,30 @@ const CalendarView = (props) => {
     </Appointments.Appointment>
   );
 
-  const Header = ({ children, appointmentData, ...restProps }) => (
+  const Content = ({ children, style, ...restProps }) => (
+    <AppointmentTooltip.Content
+      {...restProps}
+      style={{
+        ...style,
+        backgroundColor: "#FCE397",
+      }}
+    >
+      {children}
+    </AppointmentTooltip.Content>
+  );
+
+  const Header = ({ children, style, appointmentData, ...restProps }) => (
     <AppointmentTooltip.Header
       {...restProps}
-      onOpenButtonClick={() => apptEditHandler(appointmentData)}
-      onDeleteButtonClick={() => apptDeleteHandler(appointmentData)}
       showCloseButton
       showOpenButton
       showDeleteButton
+      onOpenButtonClick={() => apptEditHandler(appointmentData)}
+      onDeleteButtonClick={() => apptDeleteHandler(appointmentData)}
+      style={{
+        ...style,
+        backgroundColor: "#FFD557",
+      }}
     >
       {children}
     </AppointmentTooltip.Header>
@@ -61,7 +91,7 @@ const CalendarView = (props) => {
 
   return (
     <Paper>
-      <Scheduler data={props.apptData} height={660}>
+      <Scheduler data={appts} height={660}>
         <ViewState
           defaultCurrentDate={new Date()}
           currentViewName={currentView}
@@ -82,7 +112,10 @@ const CalendarView = (props) => {
         <TodayButton />
         <ViewSwitcher />
         <Appointments appointmentComponent={Appointment} />
-        <AppointmentTooltip headerComponent={Header} />
+        <AppointmentTooltip
+          headerComponent={Header}
+          contentComponent={Content}
+        />
         {edit ? <EditAppt data={editData} /> : null}
         {dlt ? (
           <ModalAlert

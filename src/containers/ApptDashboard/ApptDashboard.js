@@ -3,8 +3,8 @@ import { Button, Container } from "react-bootstrap";
 
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import ApptDataFetch from "./ApptDataFetch";
 import CreateAppt from "../../containers/CreateAppt/CreateAppt";
+import CalendarView from "../../components/CalendarView/CalendarView";
 
 const ApptDashboard = () => {
   const [btnClicked, setBtnClicked] = useState(false);
@@ -28,7 +28,7 @@ const ApptDashboard = () => {
         {btnClicked ? <CreateAppt /> : null}
       </Container>
       <Container className="mb-3 mt-3">
-        <ApptDataFetch />
+        <CalendarView />
       </Container>
       <Footer />
     </>
