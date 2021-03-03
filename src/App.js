@@ -6,12 +6,7 @@ import CreateAppt from "./containers/CreateAppt/CreateAppt";
 import ModalView from "../src/components/Modals/ModalView";
 
 function App() {
-  return (
-    <ApptDashboard />
-    // <FormikForm />
-    // <CreateAppt />
-    // <ModalView />
-  );
+  return <ApptDashboard />;
 }
 
 export default App;
