@@ -14,6 +14,7 @@ import {
   DayView,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import axios from "axios";
+import { Button, Container } from "react-bootstrap";
 
 import EditAppt from "../../containers/EditAppt/EditAppt";
 import ModalAlert from "../../components/Modals/ModalAlert";
@@ -29,7 +30,6 @@ const CalendarView = (props) => {
   const fetchDataHandler = useCallback(() => {
     axios.get("/appointments").then((res) => {
       setAppts(res.data);
-      console.log(res);
     });
   }, []);
 
@@ -90,43 +90,55 @@ const CalendarView = (props) => {
   };
 
   return (
-    <Paper>
-      <Scheduler data={appts} height={660}>
-        <ViewState
-          defaultCurrentDate={new Date()}
-          currentViewName={currentView}
-          onCurrentViewNameChange={setCurrentView}
-        />
-        <WeekView startDayHour={9} endDayHour={19} />
-        <WeekView
-          name="work-week"
-          displayName="Work Week"
-          excludedDays={[0, 6]}
-          startDayHour={6}
-          endDayHour={22}
-        />
-        <MonthView />
-        <DayView />
-        <Toolbar />
-        <DateNavigator />
-        <TodayButton />
-        <ViewSwitcher />
-        <Appointments appointmentComponent={Appointment} />
-        <AppointmentTooltip
-          headerComponent={Header}
-          contentComponent={Content}
-        />
-        {edit ? <EditAppt data={editData} /> : null}
-        {dlt ? (
-          <ModalAlert
-            msg="Do you want to delete?"
-            btnName="Yes"
-            data={deleteData}
-            isSecAvl
+    <>
+      <Container className="mb-3 d-flex justify-content-center">
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          onClick={fetchDataHandler}
+          className="shadow-none"
+        >
+          ⟳
+        </Button>
+      </Container>
+      <Paper>
+        <Scheduler data={appts} height={660}>
+          <ViewState
+            defaultCurrentDate={new Date()}
+            currentViewName={currentView}
+            onCurrentViewNameChange={setCurrentView}
           />
-        ) : null}
-      </Scheduler>
-    </Paper>
+          <WeekView startDayHour={9} endDayHour={19} />
+          <WeekView
+            name="work-week"
+            displayName="Work Week"
+            excludedDays={[0, 6]}
+            startDayHour={6}
+            endDayHour={22}
+          />
+          <MonthView />
+          <DayView />
+          <Toolbar />
+          <DateNavigator />
+          <TodayButton />
+          <ViewSwitcher />
+          <Appointments appointmentComponent={Appointment} />
+          <AppointmentTooltip
+            headerComponent={Header}
+            contentComponent={Content}
+          />
+          {edit ? <EditAppt data={editData} /> : null}
+          {dlt ? (
+            <ModalAlert
+              msg="Do you want to delete?"
+              btnName="Yes"
+              data={deleteData}
+              isSecAvl
+            />
+          ) : null}
+        </Scheduler>
+      </Paper>
+    </>
   );
 };
 
